@@ -306,7 +306,7 @@ int jeu::botPlay(ia bot, int cpt) {
 	int ** tab = p.getPlat();
 	int size = getSize();
 
-	test = bot.think(tab, size, 5);
+	test = bot.think(tab, size, 3);
 
 	cout << test[0] << " : " << test[1] << " : " << test[2] << endl;
 	p.assignIa(test, cpt);

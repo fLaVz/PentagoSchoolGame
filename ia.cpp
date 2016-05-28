@@ -10,6 +10,7 @@ ia::ia() {
 }
 
 
+/////////////////////////ALGORITHME MIN-MAX ///////////////////////////////////////////////
 
 vector<int> ia::think(int ** copy, int size, int profondeur) {
 
@@ -21,12 +22,10 @@ vector<int> ia::think(int ** copy, int size, int profondeur) {
       }
     }
 
-
 	cout << "Ia is thinking..." << endl;
 
 	vector<int> play;
 	int tmp, tmpi, tmpj, tmpk, tmpl; // respectivement : la valeur max, coordonnées en i, j puis la sous table a tourner et enfin dans quel sens
-	int maxval = -1000;
   int minTab;
   int resetProfondeur = profondeur;
   int alpha = -1000;
@@ -36,24 +35,24 @@ vector<int> ia::think(int ** copy, int size, int profondeur) {
 		for(int j = 0; j < size; j++) { //correspond au lignes
       for(int k = 0; k < 8; k++) { //correspond au plateau a tourner
 
-      if(tab[i][j] == 0) {
+      if(tab[i][j] == 0) {              //Si case vide
 
-        tab[i][j] = 2;
+        tab[i][j] = 2;                  //on joue
 
-        if(k == 0) {
-            profondeur = resetProfondeur;
-            minTab = 1;
-            rotateRight(tab, size, minTab);
+        if(k == 0) {        
+            profondeur = resetProfondeur; 
+            minTab = 1;   
+            rotateRight(tab, size, minTab);       //on teste la 1ere rotation
 
-            tmp = min(tab, size, profondeur-1, alpha, beta);
+            tmp = min(tab, size, profondeur-1, alpha, beta); //au joueur de jouer
 
-            if(alpha < tmp) {
+            if(alpha < tmp) {                 //comparaison coupure alpha beta
               alpha = tmp;
               tmpi = i;
               tmpj = j;
               tmpk = k;
             }
-            rotateLeft(tab, size, minTab);
+            rotateLeft(tab, size, minTab);    //on annule le coup
             tab[i][j] = 0;
 
           }
@@ -113,8 +112,9 @@ vector<int> ia::think(int ** copy, int size, int profondeur) {
           }
 
          
-          tab[i][j] = 0;
+          
           rotateRight(tab, size, minTab);
+          tab[i][j] = 0;
           }
 
 
@@ -221,8 +221,7 @@ int ia::min(int tab[][6], int size, int profondeur, int alpha, int beta) {
 		return eval(tab, size);
 	}
 
-	int minval = 1000;
-	int tmp;
+	int tmp = 0;
   int minTab;
   int resetProfondeur = profondeur;
 
@@ -235,51 +234,32 @@ int ia::min(int tab[][6], int size, int profondeur, int alpha, int beta) {
         tab[i][j] = 1;
 
         if(k == 0) {
-          profondeur = resetProfondeur;
           minTab = 1;
           rotateRight(tab, size, minTab);
 
             tmp = max(tab, size, profondeur-1, alpha, beta);
+    
+          rotateLeft(tab, size, minTab);
+          tab[i][j] = 0;
 
-            if(beta > tmp) {
+          if(beta > tmp) {
               beta = tmp;
             }
             if(beta <= alpha) {
               return beta;
             }
 
-          
-          rotateLeft(tab, size, minTab);
-          tab[i][j] = 0;
-
           }
-
-
           else if(k == 1) {
-            profondeur = resetProfondeur;
             minTab = 1;
             rotateLeft(tab, size, minTab);
             tmp = max(tab, size, profondeur-1, alpha, beta);
 
-          if(beta > tmp) {
-              beta = tmp;
-            }
-            if(beta <= alpha) {
-              return beta;
-            }
+          
 
         
           rotateRight(tab, size, minTab);
           tab[i][j] = 0;
-          }
-
-
-          else if(k == 2) {
-            profondeur = resetProfondeur;
-            minTab = 2;
-            rotateRight(tab, size, minTab);
-
-            tmp = max(tab, size, profondeur-1, alpha, beta);
 
           if(beta > tmp) {
               beta = tmp;
@@ -288,19 +268,32 @@ int ia::min(int tab[][6], int size, int profondeur, int alpha, int beta) {
               return beta;
             }
 
-         
+          }
+          else if(k == 2) {
+            minTab = 2;
+            rotateRight(tab, size, minTab);
+
+            tmp = max(tab, size, profondeur-1, alpha, beta);    
           rotateLeft(tab, size, minTab);
           tab[i][j] = 0;
 
+
+          if(beta > tmp) {
+              beta = tmp;
+            }
+            if(beta <= alpha) {
+              return beta;
+            }
+
           }
-
-
           else if(k == 3) {
-            profondeur = resetProfondeur;
             minTab = 2;
             rotateLeft(tab, size, minTab);
 
             tmp = max(tab, size, profondeur-1, alpha, beta);
+          
+          rotateRight(tab, size, minTab);
+          tab[i][j] = 0;
 
           if(beta > tmp) {
               beta = tmp;
@@ -309,18 +302,16 @@ int ia::min(int tab[][6], int size, int profondeur, int alpha, int beta) {
               return beta;
             }
 
-         
-          tab[i][j] = 0;
-          rotateRight(tab, size, minTab);
           }
-
-
           else if(k == 4) {
-            profondeur = resetProfondeur;
              minTab = 3;
             rotateRight(tab, size, minTab);
 
             tmp = max(tab, size, profondeur-1, alpha, beta);
+        
+          rotateLeft(tab, size, minTab);
+          tab[i][j] = 0;
+
 
           if(beta > tmp) {
               beta = tmp;
@@ -329,38 +320,37 @@ int ia::min(int tab[][6], int size, int profondeur, int alpha, int beta) {
               return beta;
             }
 
-        
-          rotateLeft(tab, size, minTab);
-          tab[i][j] = 0;
           }
 
 
           else if(k == 5) {
-            profondeur = resetProfondeur;
             minTab = 3;
             rotateLeft(tab, size, minTab);
 
             tmp = max(tab, size, profondeur-1, alpha, beta);
 
+          rotateRight(tab, size, minTab);
+          tab[i][j] = 0;
+
           if(beta > tmp) {
               beta = tmp;
             }
             if(beta <= alpha) {
               return beta;
             }
-
-          rotateRight(tab, size, minTab);
-          tab[i][j] = 0;
           
           }
 
 
           else if(k == 6) {
-            profondeur = resetProfondeur;
             minTab = 4;
             rotateRight(tab, size, minTab);
 
             tmp = max(tab, size, profondeur-1, alpha, beta);
+
+    
+         rotateLeft(tab, size, minTab);
+          tab[i][j] = 0;
 
           if(beta > tmp) {
               beta = tmp;
@@ -369,18 +359,17 @@ int ia::min(int tab[][6], int size, int profondeur, int alpha, int beta) {
               return beta;
             }
 
-    
-         rotateLeft(tab, size, minTab);
-          tab[i][j] = 0;
 
           }
           else if(k == 7) {
-            profondeur = resetProfondeur;
             minTab = 4;
             rotateLeft(tab, size, minTab);
 
             tmp = max(tab, size, profondeur-1, alpha, beta);
-          
+      
+            rotateRight(tab, size, minTab);
+            tab[i][j] = 0;
+
 
             if(beta > tmp) {
               beta = tmp;
@@ -388,16 +377,12 @@ int ia::min(int tab[][6], int size, int profondeur, int alpha, int beta) {
             if(beta <= alpha) {
               return beta;
             }
-      
-            rotateRight(tab, size, minTab);
-            tab[i][j] = 0;
           }
         }
       }
       
 		} 
 	}
-
 	return beta;
 
 }
@@ -412,8 +397,7 @@ int ia::max(int tab[][6], int size, int profondeur, int alpha, int beta) {
     return eval(tab, size);
   }
 
-  int maxval = -1000;
-  int tmp;
+  int tmp = 0;
   int minTab;
   int resetProfondeur = profondeur;
 
@@ -425,49 +409,49 @@ int ia::max(int tab[][6], int size, int profondeur, int alpha, int beta) {
 
         tab[i][j] = 2;
 
-        if(k == 0) {                       //Indique dans quel sens tourner
-          profondeur = resetProfondeur;
+        if(k == 0) {                       //Indique dans quel sens tourne
             minTab = 1;                   //Indique quel plateau tourner
             rotateRight(tab, size, minTab);
 
             tmp = min(tab, size, profondeur-1, alpha, beta);
 
-          if(alpha < tmp) {             //coupure alpha beta
+          rotateLeft(tab, size, minTab);  //On annule le coup
+          tab[i][j] = 0;
+
+           if(alpha < tmp) {             //coupure alpha beta
             alpha = tmp;
           } 
           if(beta <= alpha) {
             return alpha;
           }
 
-          rotateLeft(tab, size, minTab);  //On annule le coup
-          tab[i][j] = 0;
-
 
           }
           else if(k == 1) {
-            profondeur = resetProfondeur;
             minTab = 1;
             rotateLeft(tab, size, minTab);
             tmp = min(tab, size, profondeur-1, alpha, beta);
 
-            if(alpha < tmp) {
+          rotateRight(tab, size, minTab);
+          tab[i][j] = 0;
+
+          if(alpha < tmp) {
              alpha = tmp;
             } 
             if(beta <= alpha) {
               return alpha;
             }
 
-          rotateRight(tab, size, minTab);
-          tab[i][j] = 0;
-
 
           }
           else if(k == 2) {
-            profondeur = resetProfondeur;
             minTab = 2;
             rotateRight(tab, size, minTab);
 
             tmp = min(tab, size, profondeur-1, alpha, beta);
+
+          rotateLeft(tab, size, minTab);
+          tab[i][j] = 0;
 
           if(alpha < tmp) {
             alpha = tmp;
@@ -475,36 +459,36 @@ int ia::max(int tab[][6], int size, int profondeur, int alpha, int beta) {
           if(beta <= alpha) {
             return alpha;
           }
-          rotateLeft(tab, size, minTab);
-          tab[i][j] = 0;
           
 
           }
           else if(k == 3) {
-            profondeur = resetProfondeur;
             minTab = 2;
             rotateLeft(tab, size, minTab);
 
             tmp = min(tab, size, profondeur-1, alpha, beta);
-
-            if(alpha < tmp) {
-            alpha = tmp;
-            } 
-            if(beta <= alpha) {
-              return alpha;
-            }
-          tab[i][j] = 0;
+         
           rotateRight(tab, size, minTab);
+           tab[i][j] = 0;
+
+           if(alpha < tmp) {
+            alpha = tmp;
+          } 
+          if(beta <= alpha) {
+            return alpha;
+          }
           
 
           }
           else if(k == 4) {
-            profondeur = resetProfondeur;
              minTab = 3;
             rotateRight(tab, size, minTab);
 
             tmp = min(tab, size, profondeur-1, alpha, beta);
 
+          rotateLeft(tab, size, minTab);
+          tab[i][j] = 0;
+
           if(alpha < tmp) {
             alpha = tmp;
           } 
@@ -512,17 +496,16 @@ int ia::max(int tab[][6], int size, int profondeur, int alpha, int beta) {
             return alpha;
           }
 
-          rotateLeft(tab, size, minTab);
-          tab[i][j] = 0;
           }
-
-
           else if(k == 5) {
-            profondeur = resetProfondeur;
             minTab = 3;
             rotateLeft(tab, size, minTab);
 
             tmp = min(tab, size, profondeur-1, alpha, beta);
+      
+          rotateRight(tab, size, minTab);
+          tab[i][j] = 0;
+
 
           if(alpha < tmp) {
             alpha = tmp;
@@ -530,20 +513,15 @@ int ia::max(int tab[][6], int size, int profondeur, int alpha, int beta) {
           if(beta <= alpha) {
             return alpha;
           }
-
-         
-          rotateRight(tab, size, minTab);
-          tab[i][j] = 0;
           
           }
-
-
           else if(k == 6) {
-            profondeur = resetProfondeur;
             minTab = 4;
             rotateRight(tab, size, minTab);
 
             tmp = min(tab, size, profondeur-1, alpha, beta);
+          rotateLeft(tab, size, minTab);
+          tab[i][j] = 0;
 
           if(alpha < tmp) {
             alpha = tmp;
@@ -551,16 +529,17 @@ int ia::max(int tab[][6], int size, int profondeur, int alpha, int beta) {
           if(beta <= alpha) {
             return alpha;
           }
-          rotateLeft(tab, size, minTab);
-          tab[i][j] = 0;
+
 
           }
           else if(k == 7) {
-            profondeur = resetProfondeur;
             minTab = 4;
             rotateLeft(tab, size, minTab);
 
             tmp = min(tab, size, profondeur-1, alpha, beta);
+          
+            rotateRight(tab, size, minTab);
+            tab[i][j] = 0;
 
             if(alpha < tmp) {
               alpha = tmp;
@@ -568,9 +547,6 @@ int ia::max(int tab[][6], int size, int profondeur, int alpha, int beta) {
             if(beta <= alpha) {
               return alpha;
             }
-          
-            rotateRight(tab, size, minTab);
-            tab[i][j] = 0;
           }
         }
         
@@ -578,9 +554,13 @@ int ia::max(int tab[][6], int size, int profondeur, int alpha, int beta) {
       
     } 
   }
-
   return alpha;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+///////////////////////CALCUL VICTOIRE ///////////////////////////////////////
 
 
 
@@ -712,7 +692,9 @@ void ia::nbRate(int tab[][6], int * p1Rate, int * p2Rate, int aligne, int size) 
 
 int ia::isWinner(int tab[][6], int size) {
 
-  int i, j, p1, p2;
+  int i, j;
+  int p1 = 0;
+  int p2 = 0;
 
   nbRate(tab, &p1, &p2, 5, size); //verifie si il y a une série de 5 pions alignés
 
@@ -743,20 +725,19 @@ int ia::isWinner(int tab[][6], int size) {
 
 int ia::calcScore(int cpion, int cplay) {
 
-  if(cpion == 1) {
+
+  if(cpion == 1) {      //renvoie une valeur * le nombre de pions de l'ia sur la ligne concerée
+
     return 1*cplay;
 
   }else if(cpion == 2) {
-    return 15*cplay;  
+    return 5*cplay;  
 
   }else if(cpion == 3) {
-    return 30*cplay;  
+    return 10*cplay;  
 
   }else if(cpion == 4) {
-    return 45*cplay;  
-
-  }else if(cpion == 5) {
-    return 60*cplay;  
+    return 15*cplay;  
 
   }else {
     return 0;
@@ -792,9 +773,6 @@ int ia::eval(int tab[][6], int size) {
 		}
 	}
 
-  int p1Rate = 0;
-  int p2Rate = 0;
-
   int score = 0;
 
 
@@ -803,7 +781,7 @@ int ia::eval(int tab[][6], int size) {
 
 //Diagonale 1//
   for(int i = 0; i < size; i++) {
-    if(tab[i][i] !=  0) {           //des qu'il y a un pion on le compte
+    if(tab[i][i] != 0) {           //des qu'il y a un pion on le compte
       cpion++;
 
       if(tab[i][i] == 2)            //si pion ia, score augmente
@@ -820,7 +798,7 @@ int ia::eval(int tab[][6], int size) {
   cpion = 0;
   cplay = 0;
   
-  for(int i = 1; i < size-1; i++) {
+  for(int i = 1; i < size; i++) {
     for(int j = 0; j < size-1; j++) {
 
       if(tab[i][j] !=  0) {
@@ -859,7 +837,7 @@ int ia::eval(int tab[][6], int size) {
   cpion = 0;
   cplay = 0;
   //Diagonale 4//
-  for(int i = 0; i < size; i++) {
+  for(int i = 0; i < size-1; i++) {
     for(int j = size-1; j > -1; j--) {
       if(tab[i][j] !=  0) {
         cpion++;
@@ -880,10 +858,10 @@ int ia::eval(int tab[][6], int size) {
   cplay = 0;
   
   for(int i = 1; i < size; i++) {
-    for(int j = size-1; j > 0; j--) {
+    for(int j = size; j > -1; j--) {
 
       if(tab[i][j] !=  0) {
-      cpion++;
+        cpion++;
 
       if(tab[i][j] == 2)
         cplay++;
@@ -903,7 +881,7 @@ int ia::eval(int tab[][6], int size) {
     for(int j = size-2; j > -1 ; j--) {
 
       if(tab[i][j] !=  0) {
-      cpion++;
+        cpion++;
 
         if(tab[i][j] == 2)
           cplay++;
@@ -921,7 +899,7 @@ int ia::eval(int tab[][6], int size) {
     cplay = 0;
     for(int j = 0; j < size; j++) {
       if(tab[i][j] !=  0) {
-      cpion++;
+        cpion++;
 
         if(tab[i][j] == 2)
           cplay++;
@@ -931,23 +909,6 @@ int ia::eval(int tab[][6], int size) {
     }
   score += calcScore(cpion,cplay); 
   }
-
-  for(int i = 1; i < size; i++) {
-    cpion = 0;
-    cplay = 0;
-    for(int j = 0; j < size; j++) {
-      if(tab[i][j] !=  0) {
-      cpion++;
-
-        if(tab[i][j] == 2)
-          cplay++;
-        else
-          cplay--;
-      }
-    }
-  score += calcScore(cpion,cplay); 
-  }
-  
 
   //Collonnes
   for(int i = 0; i < size-1; i++) {
@@ -955,7 +916,7 @@ int ia::eval(int tab[][6], int size) {
     cplay = 0;
     for(int j = 0; j < size; j++) {
       if(tab[j][i] !=  0) {
-      cpion++;
+        cpion++;
 
         if(tab[j][i] == 2)
           cplay++;
@@ -965,26 +926,16 @@ int ia::eval(int tab[][6], int size) {
     }
    score += calcScore(cpion,cplay);
   }
-
-  for(int i = 1; i < size; i++) {
-    cpion = 0;
-    cplay = 0;
-    for(int j = 0; j < size; j++) {
-      if(tab[j][i] !=  0) {
-      cpion++;
-
-        if(tab[j][i] == 2)
-          cplay++;
-        else
-          cplay--;
-      }
-    }
-   score += calcScore(cpion,cplay);
-  }
-
-
+  
   return score;
 }
+  
+/////////////////////////////////////////////////////////////////////
+
+
+
+
+/////////////////////////ROTATIONS////////////////////////////////////
 
 int ia::rotateLeft(int tab[][6], int size, int minTab) {
 
