@@ -110,7 +110,7 @@ plat::plat() {
     y = 167;
 
 
-    for(int l = 0; l < size; l++)
+    for(int l = 0; l < size; l++) {
       for(int m = 0; m < size; m++) {
         //cout << x << " : " << y << endl; //Affichage des points d'origine des texures pour le calibrage
         grid[l][m].setTexture(def);
@@ -120,11 +120,14 @@ plat::plat() {
         if(m == 2)
           x += 37;
         if(m == 5) {
-          y += 62;
+          y += 61;
           x = 183;
         }
       x += 51;
-      } 
+      }
+      if(l == 2)
+        y += 8;
+    }
 
     //Initialisation des texures sur le sprite du sous tableau
     if(!tabTexture.loadFromFile("images/soustab.png"))
