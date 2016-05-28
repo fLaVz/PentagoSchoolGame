@@ -25,4 +25,4 @@ Essayer d'installer la sfml sur le pc	: sudo apt-get install libsfml-dev
 
 
 Le projet est entierement accessible sur github a l'adresse :
-https://github.com/fLaVz/schoolGame.git
+https://github.com/fLaVz/PentagoSchoolGame
