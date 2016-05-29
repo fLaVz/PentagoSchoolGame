@@ -255,9 +255,6 @@ int ia::min(int tab[][6], int size, int profondeur, int alpha, int beta) {
             rotateLeft(tab, size, minTab);
             tmp = max(tab, size, profondeur-1, alpha, beta);
 
-          
-
-        
           rotateRight(tab, size, minTab);
           tab[i][j] = 0;
 
@@ -738,6 +735,20 @@ int ia::calcScore(int cpion, int cplay) {
 
   }else if(cpion == 4) {
     return 15*cplay;  
+
+  }else if(cpion == 5) {
+    if(cplay == 5)
+      return 900;
+    else if(cplay == -5)
+      return -900;
+    return 30*cplay;
+
+  }else if(cpion == 6) {
+    if(cplay == 5)
+      return 900;
+    else if(cplay == -5)
+      return -900;
+    return 45*cplay;
 
   }else {
     return 0;
