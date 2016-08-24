@@ -3,7 +3,7 @@
 //////Julien Delvaux////////
 ////////////////////////////
 
-Entrez dans la dossier avec la console :
+Entrez dans le dossier avec la console :
 
 make -> compile
 make clean -> nettoie les fichiers .o
